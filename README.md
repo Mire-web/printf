@@ -4,5 +4,5 @@ Write your own printf function.
 
 collaborators
 
-1. Mire Ameh (mire-web)
+1. Mire Amah (mire-web)
 2. Fiona Joseph (techgirlfiona)

@@ -1,42 +1,46 @@
 #include "main.h"
 
 /**
- * print_int - prints an integer
- * @arguments: input string
- * @buf: buffer pointer
- * @ibuf: index for buffer pointer
- * Return: number of chars printed.
+ * print_int - Print int
+ * @types: Lista of arguments
+ * @buffer: Buffer array to handle print
+ * @flags:  Calculates active flags
+ * @width: get width.
+ * @precision: Precision specification
+ * @size: Size specifier
+ * Return: Number of chars printed
  */
-int print_int(va_list arguments, char *buf, unsigned int ibuf)
+int print_int(va_list types, char buffer[],
+	int flags, int width, int precision, int size)
 {
-	int int_input;
-	unsigned int int_in, int_temp, i, div, isneg;
+	int i = BUFF_SIZE - 2;
+	int is_negative = 0;
+	long int n = va_arg(types, long int);
+	unsigned long int num;
 
-	int_input = va_arg(arguments, int);
-	isneg = 0;
-	if (int_input < 0)
-	{
-		int_in = int_input * -1;
-		ibuf = handl_buf(buf, '-', ibuf);
-		isneg = 1;
-	}
-	else
-	{
-		int_in = int_input;
-	}
+	n = convert_size_number(n, size);
 
-	int_temp = int_in;
-	div = 1;
+	if (n == 0)
+		buffer[i--] = '0';
 
-	while (int_temp > 9)
+	buffer[BUFF_SIZE - 1] = '\0';
+	num = (unsigned long int)n;
+
+	if (n < 0)
 	{
-		div *= 10;
-		int_temp /= 10;
+		num = (unsigned long int)((-1) * n);
+		is_negative = 1;
 	}
 
-	for (i = 0; div > 0; div /= 10, i++)
+	while (num > 0)
 	{
-		ibuf = handl_buf(buf, ((int_in / div) % 10) + '0', ibuf);
+		buffer[i--] = (num % 10) + '0';
+		num /= 10;
 	}
-	return (i + isneg);
+
+	i++;
+
+	return (write_number(is_negative, i, buffer, flags, width, precision, size));
 }
+
+
